@@ -1,0 +1,42 @@
+{
+  "name": "pagium-release",
+  "version": "0.0.1",
+  "description": "release of pagium system",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "preferGlobal": true,
+  "bin": {
+    "pagium": "bin/pagium-command-release"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pagium-team/pagium-command-release.git"
+  },
+  "keywords": [
+    "block",
+    "nodejs",
+    "pagium",
+    "framework",
+    "mobile",
+    "pc"
+  ],
+  "author": "pagium-team",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/pagium-team/pagium-command-release/issues"
+  },
+  "dependencies": {
+    "clean-css": "^3.4.19",
+    "ejs": "^2.5.2",
+    "fs": "0.0.1-security",
+    "stylus": "^0.54.5",
+    "uglify-js": "^1.3.5",
+    "walk": "^2.3.9"
+  },
+  "engines": {
+    "node": ">=4.0.0"
+  },
+  "homepage": "https://github.com/pagium-team/pagium#readme"
+}
