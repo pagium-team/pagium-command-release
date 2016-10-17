@@ -1,7 +1,9 @@
 "use strict";
 
 var walk = require("walk");
+var ProgressBar = require('progress');
 var modules = require("./modules"); // 逻辑模块
+var pagesPath = process.cwd() + "/../test/views/"; // 模板路劲
 
 /**
  * pagium 编译模块
@@ -25,7 +27,7 @@ module.exports = {
 			this._compile(pageList);
 		} else {
 			var self = this;
-			var walker = walk.walk(process.cwd() + "/views/");
+			var walker = walk.walk(pagesPath);
 
 			/**
 		     * 检测到文件
@@ -61,10 +63,17 @@ module.exports = {
 	 * @method _compile
 	 */
 	_compile: function(pageList) {
+		var bar = new ProgressBar("  :title [:bar] :percent", {
+		    complete: "=",
+		  	incomplete: " ",
+		  	width: 30,
+		  	total: 100,
+		});
+
 		for (var i = 0, len = pageList.length; i < len; ++i) {
 			var pName = pageList[i];
 			modules.page.compile(pName);
-			console.log(pName + ".html" + " done".green);
+			bar.tick(Math.round((100 * 1 / pageList.length)), { title: pName });
 		}
 	}
 }
