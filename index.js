@@ -64,6 +64,7 @@ module.exports = {
 		for (var i = 0, len = pageList.length; i < len; ++i) {
 			var pName = pageList[i];
 			modules.page.compile(pName);
+			console.log(pName + ".html" + " done".green);
 		}
 	}
 }
