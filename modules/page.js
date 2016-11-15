@@ -1,6 +1,7 @@
 "use strict";
 
 var fs = require("fs");
+var globalConfig = require("../config/global"); // 全局配置
 var com = require("./com"); // 组件逻辑
 
 /**
@@ -18,7 +19,7 @@ module.exports = {
 	 * @method compile
 	 */
 	compile: function(pageName) {
-		var htmlPath = process.cwd() + "/views/" + pageName + ".html";
+		var htmlPath = globalConfig.path + "/views/" + pageName + ".html";
 		if (!fs.existsSync(htmlPath)) {
 			console.log(htmlPath + " not exist!");
 			return ;
@@ -31,12 +32,18 @@ module.exports = {
 			var count = 0;
 			for (var i = 0, len = comsStr.length; i < len; ++i) { 
 				var reg = new RegExp(/name="(.*?)"/i);
-				comsStr[i].match(reg);
-				var comName = RegExp.$1;
-
+				var comName;
+				if (comsStr[i].match(reg)) {
+					comName = RegExp.$1;
+				} else {
+					console.log("模板格式书写错误");
+				}
+				
 				var reg = new RegExp(/data="(.*?)"/i);
-				comsStr[i].match(reg);
-				var comDataKey = RegExp.$1;
+				var comDataKey = "data";
+				if (comsStr[i].match(reg)) {
+					var comDataKey = RegExp.$1;
+				}
 
 				var self = this;
 				(function(comStr) {
@@ -69,11 +76,11 @@ module.exports = {
 			pageContent = pageContent.replace(cObj.comStr, htmlContent);
 		}
 
-		if (!fs.existsSync(process.cwd() + "/output/")) {
-			fs.mkdirSync(process.cwd() + "/output/");
+		if (!fs.existsSync(globalConfig.path + "/output/")) {
+			fs.mkdirSync(globalConfig.path + "/output/");
 		}
 
-		var htmlPath = process.cwd() + "/output/" + pageName + ".html";
+		var htmlPath = globalConfig.path + "/output/" + pageName + ".html";
 		fs.writeFileSync(htmlPath, pageContent);
 	}
 }

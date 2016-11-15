@@ -1,6 +1,7 @@
 "use strict";
 
 var fs = require("fs");
+var globalConfig = require("../config/global"); // 全局配置
 var engine = require("../engine");
 var uuid = require("../utils/uuid"); // 随机id
 
@@ -19,7 +20,7 @@ module.exports = {
 	 * @method compile
 	 */
 	compile: function(comName, comDataKey, callback) {
-		var comPath = process.cwd() + "/components/" + comName;
+		var comPath = globalConfig.path + "/components/" + comName;
 		if (!fs.existsSync(comPath)) {
 			console.log(comPath + " not exist!");
 			return ;
