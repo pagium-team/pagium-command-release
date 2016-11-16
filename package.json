@@ -1,6 +1,6 @@
 {
   "name": "pagium-command-release",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "release of pagium system",
   "main": "index.js",
   "scripts": {

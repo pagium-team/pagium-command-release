@@ -2,22 +2,27 @@
 
 var walk = require("walk");
 var ProgressBar = require('progress');
-var globalConfig = require("./config/global");
 var modules = require("./modules"); // 逻辑模块
-var pagesPath = globalConfig.path + "/views/"; // 模板路劲
 
 /**
  * 程序主入口
  *
+ * @param {String} projectPath 项目路径
  * @param {String} pageName 需要编译的页面名称
+ * @param {Function} callback 回调方法
  * @method run
  */
-var run = function(pageName) {
+var run = function(projectPath, params) {
+	var pageName = params.pageName;
+	var callback = params.callback;
+
+	var pagesPath = projectPath + "/views/"; // 模板路劲
+
 	var pageList = [];
 
 	if (pageName) {
 		pageList.push(pageName);
-		_compile(pageList);
+		_compile(projectPath, pageList);
 	} else {
 		var self = this;
 		var walker = walk.walk(pagesPath);
@@ -44,7 +49,7 @@ var run = function(pageName) {
 	     * @event on end
 	     */
 	    walker.on("end", function() {
-	        _compile(pageList);
+	        _compile(projectPath, pageList, callback);
 	    });
 	}
 }
@@ -52,10 +57,12 @@ var run = function(pageName) {
 /**
  * 编译
  *
+ * @param {String} projectPath 项目路径
  * @param {Array} pageList 页面列表
+ * @param {Function} callback 回调方法
  * @method _compile
  */
-var _compile = function(pageList) {
+var _compile = function(projectPath, pageList, callback) {
 	var bar = new ProgressBar("  :title [:bar] :percent", {
 	    complete: "=",
 	  	incomplete: " ",
@@ -65,9 +72,11 @@ var _compile = function(pageList) {
 
 	for (var i = 0, len = pageList.length; i < len; ++i) {
 		var pName = pageList[i];
-		modules.page.compile(pName);
+		modules.page.compile(projectPath, pName);
 		bar.tick(Math.round((100 * 1 / pageList.length)), { title: pName });
 	}
+
+	callback && callback();
 }
 
 /**

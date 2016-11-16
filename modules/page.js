@@ -1,7 +1,6 @@
 "use strict";
 
 var fs = require("fs");
-var globalConfig = require("../config/global"); // 全局配置
 var com = require("./com"); // 组件逻辑
 
 /**
@@ -15,11 +14,12 @@ module.exports = {
 	/**
 	 * 编译单个页面
 	 *
+	 * @param {String} projectPath 项目路径
 	 * @param {String} pageName 页面名称
 	 * @method compile
 	 */
-	compile: function(pageName) {
-		var htmlPath = globalConfig.path + "/views/" + pageName + ".html";
+	compile: function(projectPath, pageName) {
+		var htmlPath = projectPath + "/views/" + pageName + ".html";
 		if (!fs.existsSync(htmlPath)) {
 			console.log(htmlPath + " not exist!");
 			return ;
@@ -47,11 +47,11 @@ module.exports = {
 
 				var self = this;
 				(function(comStr) {
-					com.compile(comName, comDataKey, function(comObj) {
+					com.compile(projectPath, comName, comDataKey, function(comObj) {
 						comObj.comStr = comStr;
 						comObjs.push(comObj);
 						if (++count >= len) {
-							self.writeHTML(pageName, pageContent, comObjs);
+							self.writeHTML(projectPath, pageName, pageContent, comObjs);
 						}
 					});
 				})(comsStr[i]);
@@ -62,12 +62,13 @@ module.exports = {
 	/**
 	 * 输出 HTML
 	 *
+	 * @param {String} projectPath 项目路径
 	 * @param {String} pageName 页面名称
 	 * @param {String} pageContent 页面内容
 	 * @param {Array} comObjs 组件配置内容
 	 * @method compile
 	 */
-	writeHTML: function(pageName, pageContent, comObjs) {
+	writeHTML: function(projectPath, pageName, pageContent, comObjs) {
 		for (var i = 0, len = comObjs.length; i < len; ++i) {
 			var cObj = comObjs[i];
 			var htmlContent = "\n<div id=\"" + cObj.id + "\">\n";
@@ -76,11 +77,11 @@ module.exports = {
 			pageContent = pageContent.replace(cObj.comStr, htmlContent);
 		}
 
-		if (!fs.existsSync(globalConfig.path + "/output/")) {
-			fs.mkdirSync(globalConfig.path + "/output/");
+		if (!fs.existsSync(projectPath + "/output/")) {
+			fs.mkdirSync(projectPath + "/output/");
 		}
 
-		var htmlPath = globalConfig.path + "/output/" + pageName + ".html";
+		var htmlPath = projectPath + "/output/" + pageName + ".html";
 		fs.writeFileSync(htmlPath, pageContent);
 	}
 }
