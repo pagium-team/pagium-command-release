@@ -7,9 +7,6 @@
     "test": "test"
   },
   "preferGlobal": true,
-  "bin": {
-    "pagium": "bin/pagium-command-release"
-  },
   "repository": {
     "type": "git",
     "url": "https://github.com/pagium-team/pagium-command-release.git"

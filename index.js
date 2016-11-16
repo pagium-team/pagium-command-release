@@ -13,8 +13,10 @@ var modules = require("./modules"); // 逻辑模块
  * @method run
  */
 var run = function(projectPath, params) {
-	var pageName = params.pageName;
-	var callback = params.callback;
+	if (typeof params == "Object") {
+		var pageName = params.pageName;
+		var callback = params.callback;
+	}
 
 	var pagesPath = projectPath + "/views/"; // 模板路劲
 
