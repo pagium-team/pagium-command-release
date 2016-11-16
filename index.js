@@ -13,7 +13,7 @@ var modules = require("./modules"); // 逻辑模块
  * @method run
  */
 var run = function(projectPath, params) {
-	if (typeof params == "Object") {
+	if (params && typeof params == "object") {
 		var pageName = params.pageName;
 		var callback = params.callback;
 	}
