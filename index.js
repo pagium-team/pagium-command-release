@@ -8,14 +8,14 @@ var modules = require("./modules"); // 逻辑模块
  * 程序主入口
  *
  * @param {String} projectPath 项目路径
- * @param {String} pageName 需要编译的页面名称
- * @param {Function} callback 回调方法
+ * @param {Function} params 配置对象
  * @method run
  */
 var run = function(projectPath, params) {
+	var pageName;
+
 	if (params && typeof params == "object") {
-		var pageName = params.pageName;
-		var callback = params.callback;
+		pageName = params.pageName;
 	}
 
 	var pagesPath = projectPath + "/views/"; // 模板路劲
@@ -33,7 +33,7 @@ var run = function(projectPath, params) {
 	     * 检测到文件
 	     *
 	     * @event on file
-	     */
+	     */ 
 	    walker.on("file", function(root, fileStats, next) {
 	        var fileName = fileStats.name;
 	        var htmlReg = new RegExp(/\.html$/);
@@ -51,7 +51,7 @@ var run = function(projectPath, params) {
 	     * @event on end
 	     */
 	    walker.on("end", function() {
-	        _compile(projectPath, pageList, callback);
+	        _compile(projectPath, pageList, params);
 	    });
 	}
 }
@@ -61,20 +61,26 @@ var run = function(projectPath, params) {
  *
  * @param {String} projectPath 项目路径
  * @param {Array} pageList 页面列表
- * @param {Function} callback 回调方法
+ * @param {Function} params 配置对象
  * @method _compile
  */
-var _compile = function(projectPath, pageList, callback) {
+var _compile = function(projectPath, pageList, params) {
+	var callback;
+
+	if (params && typeof params == "object") {
+		callback = params.callback;
+	}
+
 	var bar = new ProgressBar("  :title [:bar] :percent", {
 	    complete: "=",
 	  	incomplete: " ",
 	  	width: 30,
-	  	total: 100,
+	  	total: 100
 	});
 
 	for (var i = 0, len = pageList.length; i < len; ++i) {
 		var pName = pageList[i];
-		modules.page.compile(projectPath, pName);
+		modules.page.compile(projectPath, pName, params);
 		bar.tick(Math.round((100 * 1 / pageList.length)), { title: pName });
 	}
 

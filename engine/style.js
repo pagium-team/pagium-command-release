@@ -25,6 +25,7 @@ module.exports = {
 		var comId = params.comId;
 		var comPath = params.comPath;
 		var comName = params.comName; 
+		var optimize = params.optimize;
 
 		var comStylusPath = comPath + "/" + comName + ".styl";
 
@@ -37,8 +38,10 @@ module.exports = {
 		var content = fs.readFileSync(comStylusPath, "utf-8");
 		
 		stylus(content).render(function(err, css) {
-			css = new CleanCss().minify(css).styles;
-
+			if (optimize) {
+				css = new CleanCss().minify(css).styles;
+			}
+			
 			var styleContent = "<style type=\"text\/css\">\n";
 			styleContent += css.replace(/pgClass-*/igm, comId + "-");
 			styleContent += "\n</style>";

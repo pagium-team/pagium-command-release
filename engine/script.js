@@ -26,6 +26,7 @@ module.exports = {
 		var comId = params.comId;
 		var comPath = params.comPath;
 		var comName = params.comName;
+		var optimize = params.optimize;
 
 		var comScriptPath = comPath + "/" + comName + ".js";
 		if (!fs.existsSync(comScriptPath)) {
@@ -38,10 +39,12 @@ module.exports = {
 		scripts = scripts.replace(/pgId-*/igm, comId + "-");
 		scripts = "(function() {\n" + scripts + "\n})();"; // 保护局部变量
 
-		var ast = jsp.parse(scripts); // parse code and get the initial AST
-		ast = pro.ast_mangle(ast); // get a new AST with mangled names
-		ast = pro.ast_squeeze(ast); // get an AST with compression optimizations
-		scripts = pro.gen_code(ast); // compressed code here
+		if (optimize) {
+			var ast = jsp.parse(scripts); // parse code and get the initial AST
+			ast = pro.ast_mangle(ast); // get a new AST with mangled names
+			ast = pro.ast_squeeze(ast); // get an AST with compression optimizations
+			scripts = pro.gen_code(ast); // compressed code here
+		}
 
 		var scriptContent = "<script type=\"text/javascript\">\n";
 		scriptContent += scripts + "\n";

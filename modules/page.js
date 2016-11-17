@@ -16,9 +16,10 @@ module.exports = {
 	 *
 	 * @param {String} projectPath 项目路径
 	 * @param {String} pageName 页面名称
+	 * @param {Function} params 配置对象
 	 * @method compile
 	 */
-	compile: function(projectPath, pageName) {
+	compile: function(projectPath, pageName, params) {
 		var htmlPath = projectPath + "/views/" + pageName + ".html";
 		if (!fs.existsSync(htmlPath)) {
 			console.log(htmlPath + " not exist!");
@@ -47,11 +48,11 @@ module.exports = {
 
 				var self = this;
 				(function(comStr) {
-					com.compile(projectPath, comName, comDataKey, function(comObj) {
+					com.compile(projectPath, comName, comDataKey, params, function(comObj) {
 						comObj.comStr = comStr;
 						comObjs.push(comObj);
 						if (++count >= len) {
-							self.writeHTML(projectPath, pageName, pageContent, comObjs);
+							self.writeHTML(projectPath, pageName, pageContent, comObjs, params);
 						}
 					});
 				})(comsStr[i]);
@@ -66,15 +67,31 @@ module.exports = {
 	 * @param {String} pageName 页面名称
 	 * @param {String} pageContent 页面内容
 	 * @param {Array} comObjs 组件配置内容
+	 * @param {Function} params 配置对象
 	 * @method compile
 	 */
-	writeHTML: function(projectPath, pageName, pageContent, comObjs) {
+	writeHTML: function(projectPath, pageName, pageContent, comObjs, params) {
+		var live;
+
+		if (params && typeof params == "object") {
+			live = params.live;
+		}
+
 		for (var i = 0, len = comObjs.length; i < len; ++i) {
 			var cObj = comObjs[i];
 			var htmlContent = "\n<div id=\"" + cObj.id + "\">\n";
 			htmlContent += cObj.style + cObj.tpl + cObj.script;
 			htmlContent += "\n</div>\n";
 			pageContent = pageContent.replace(cObj.comStr, htmlContent);
+		}
+
+		if (live) {
+			var scriptStr = "<script>" +
+				  "document.write('<script src=\"http:\/\/' + (location.host || 'localhost').split(':')[0] +" +
+				  "':35729/livereload.js?snipver=1\"></' + 'script>')" +
+				"</script>\n" +
+				"</html>";
+			pageContent = pageContent.replace("</html>", scriptStr);
 		}
 
 		if (!fs.existsSync(projectPath + "/output/")) {

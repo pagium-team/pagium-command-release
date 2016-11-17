@@ -18,10 +18,17 @@ module.exports = {
 	 * @param {String} projectPath 项目路径
 	 * @param {String} comName 组件名称
 	 * @param {String} comDataKey 组件键值
+	 * @param {Object} params 数据配置对象
 	 * @param {Function} callback 回调方法
 	 * @method compile
 	 */
-	compile: function(projectPath, comName, comDataKey, callback) {
+	compile: function(projectPath, comName, comDataKey, params, callback) {
+		var optimize;
+
+		if (params && typeof params == "object") {
+			optimize = params.optimize;
+		}
+
 		var comPath = projectPath + "/components/" + comName;
 		if (!fs.existsSync(comPath)) {
 			console.log(comPath + " not exist!");
@@ -40,7 +47,8 @@ module.exports = {
 		engine.script.compile({
 			comId: comObj.id,
 			comPath: comPath, 
-			comName: comName
+			comName: comName,
+			optimize: optimize
 		}, function(scriptContent) {
 			comObj.script = scriptContent;
 			self.next(comObj, callback);
@@ -49,7 +57,8 @@ module.exports = {
 		engine.style.compile({
 			comId: comObj.id,
 			comPath: comPath, 
-			comName: comName
+			comName: comName,
+			optimize: optimize
 		}, function(styleContent) {
 			comObj.style = styleContent;
 			self.next(comObj, callback);
