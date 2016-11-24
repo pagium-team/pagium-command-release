@@ -18,7 +18,7 @@ var run = function(projectPath, params) {
 		pageName = params.pageName;
 	}
 
-	var pagesPath = projectPath + "/views/"; // 模板路劲
+	var pagesPath = projectPath + "/views/products/"; // 模板路劲
 
 	var pageList = [];
 

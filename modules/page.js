@@ -20,7 +20,7 @@ module.exports = {
 	 * @method compile
 	 */
 	compile: function(projectPath, pageName, params) {
-		var htmlPath = projectPath + "/views/" + pageName + ".html";
+		var htmlPath = projectPath + "/views/products/" + pageName + ".html";
 		if (!fs.existsSync(htmlPath)) {
 			console.log(htmlPath + " not exist!");
 			return ;
