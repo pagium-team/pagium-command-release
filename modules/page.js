@@ -80,7 +80,9 @@ module.exports = {
 		for (var i = 0, len = comObjs.length; i < len; ++i) {
 			var cObj = comObjs[i];
 			var htmlContent = "\n<div id=\"" + cObj.id + "\">\n";
-			htmlContent += cObj.style + cObj.tpl + cObj.script;
+			htmlContent += cObj.style? cObj.style : "";
+			htmlContent += cObj.tpl? cObj.tpl : "";
+			htmlContent += cObj.script? cObj.script : "";
 			htmlContent += "\n</div>\n";
 			pageContent = pageContent.replace(cObj.comStr, htmlContent);
 		}
