@@ -37,7 +37,17 @@ module.exports = {
 
 		var scripts = fs.readFileSync(comScriptPath, "utf-8");
 		scripts = scripts.replace(/pgId-*/igm, comId + "-");
-		scripts = "(function() {\n" + scripts + "\n})();"; // 保护局部变量
+
+		// ---------------------- 去除 module.exports ------- start ------- 
+		var startInex = scripts.indexOf("module.exports");
+		var endIndex = scripts.indexOf("{") + 1;
+		var modulesScript = scripts.substring(startInex, endIndex);
+		scripts = scripts.replace(modulesScript, "");
+		var lastIndex = scripts.lastIndexOf("}");
+		scripts = scripts.substring(0, lastIndex);
+		// ---------------------- 去除 module.exports ------- end ------- 
+
+		scripts = "window.addEventListener('load', function() {\n" + scripts + "\n});"; // 保护局部变量
 
 		if (optimize) {
 			var ast = jsp.parse(scripts); // parse code and get the initial AST
