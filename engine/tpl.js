@@ -46,6 +46,7 @@ module.exports = {
 		ejsContent = ejsContent.replace(/pgId-*/igm, comId + "-");
 		ejsContent = ejsContent.replace(/pgClass-*/igm, comId + "-");
 		var data = require(dataPath);
+		delete require.cache[require.resolve(dataPath)];
 		var content = ejs.render(ejsContent, data);
 		callback && callback(content);
 	}
