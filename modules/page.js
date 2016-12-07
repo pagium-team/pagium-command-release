@@ -57,6 +57,8 @@ module.exports = {
 					});
 				})(comsStr[i]);
 			}
+		} else {
+			this.writeHTML(projectPath, pageName, pageContent, [], params);
 		}
 	},
 
