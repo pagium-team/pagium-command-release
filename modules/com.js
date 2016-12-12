@@ -85,7 +85,7 @@ module.exports = {
 	next: function(comObj, callback) {
 		var isComplete = true;
 		for (var key in comObj) {
-			if (comObj[key] == false) {
+			if (comObj[key] === false) {
 				isComplete = false;
 				break ;
 			}
