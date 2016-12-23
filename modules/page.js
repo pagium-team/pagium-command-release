@@ -91,7 +91,7 @@ module.exports = {
 			if (!params.hideComDiv) {
 				htmlContent += "\n</div>\n";
 			}
-			pageContent = pageContent.replace(cObj.comStr, htmlContent);
+			pageContent = pageContent.replace(cObj.comStr, htmlContent.replace(/\$/g, "$$$$"));
 		}
 
 		if (live) {
